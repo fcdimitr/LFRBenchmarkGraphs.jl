@@ -1,13 +1,13 @@
 name = "LFRBenchmarkGraphs"
 uuid = "e2d0dd93-c6be-4a4f-9a61-2b35d7242bb2"
-authors = ["Dimitris Floros <flojim4@gmail.com> and contributors"]
-version = "1.0.0-DEV"
+authors = ["Dimitris Floros"]
+version = "1.0.0"
+
+[deps]
+Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
+lfr_benchmark_jll = "cb590574-ea86-51dd-800e-297a027516d0"
 
 [compat]
-julia = "1"
-
-[extras]
-Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
-
-[targets]
-test = ["Test"]
+julia = "1.6"
+Graphs = "1.9"
+lfr_benchmark_jll = "1.0"
