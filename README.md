@@ -31,11 +31,6 @@ Pkg.activate(".")
 using GraphMakie, CairoMakie, LFRBenchmarkGraphs, Graphs
 ````
 
-````
-  Activating project at `~/Workspace/julia-dev/LFRBenchmarkGraphs/notebooks`
-
-````
-
 ### Graph generation
 
 Generate an example LFR graph using the LFR benchmark. The LFR benchmark is a popular benchmark
