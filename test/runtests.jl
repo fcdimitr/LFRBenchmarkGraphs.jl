@@ -50,5 +50,35 @@ end
       @test is_directed(lfr) == isdir
       @test length(cid) == nv(lfr)
     end
+    @testset "error $isdir" for isdir in [false, true]
+      @test_throws ArgumentError lancichinetti_fortunato_radicchi(
+        0,
+        3.5,
+        5;
+        seed = 1,
+        is_directed = isdir,
+      )
+      @test_throws ArgumentError lancichinetti_fortunato_radicchi(
+        8,
+        1.0,
+        5;
+        seed = 1,
+        is_directed = isdir,
+      )
+      @test_throws ArgumentError lancichinetti_fortunato_radicchi(
+        8,
+        1.0,
+        9;
+        seed = 1,
+        is_directed = isdir,
+      )
+      @test_throws ArgumentError lancichinetti_fortunato_radicchi(
+        4,
+        2.1,
+        3;
+        seed = 1,
+        is_directed = isdir,
+      )
+    end
   end
 end
