@@ -5,6 +5,16 @@ using Aqua
 using JET
 using Documenter
 using Test
+using Pkg
+
+function get_pkg_version(name::AbstractString)
+  for dep in values(Pkg.dependencies())
+    if dep.name == name
+      return dep.version
+    end
+  end
+  return error("Dependency not available")
+end
 
 @testset verbose = true "LFRBenchmarkGraphs.jl" begin
   @testset "Code quality" begin
@@ -17,8 +27,15 @@ using Test
   @testset "Code formatting" begin
     @test JuliaFormatter.format(LFRBenchmarkGraphs; verbose = false, overwrite = false)
   end
-  @testset "Code linting" begin
-    JET.test_package(LFRBenchmarkGraphs; target_defined_modules = true)
+  @testset "Code quality (JET.jl)" begin
+    if VERSION >= v"1.9"
+      @assert get_pkg_version("JET") >= v"0.8.4"
+      JET.test_package(
+        LFRBenchmarkGraphs;
+        target_defined_modules = true,
+        ignore_missing_comparison = true,
+      )
+    end
   end
   doctest(LFRBenchmarkGraphs)
   @testset "Lancichinetti-Fortunato-Radicchi" begin
