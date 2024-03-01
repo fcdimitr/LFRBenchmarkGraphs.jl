@@ -23,11 +23,9 @@ pkg> add LFRBenchmarkGraphs
 ## Example usage
 
 ### Dependencies for this demo
-Import the necessary packages and activate the environment
+Import the necessary packages.
 
 ````julia
-using Pkg
-Pkg.activate(".")
 using GraphMakie, CairoMakie, LFRBenchmarkGraphs, Graphs
 ````
 
