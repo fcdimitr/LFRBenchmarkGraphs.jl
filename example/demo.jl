@@ -18,9 +18,8 @@ g, cid = lancichinetti_fortunato_radicchi(1000, 15, 40);
 # We use the `GraphMakie` package to visualize the graph, with the default layout algorithm.
 
 f = Figure()
-ax =
-  Axis(f[1, 1]; title = "LFR graph", xticklabelsvisible = false, yticklabelsvisible = false)
-graphplot!(ax, g; edge_width = 0.1, node_color = cid, node_size = 6)
+ax = Axis(f[1, 1]; title="LFR graph", xticklabelsvisible=false, yticklabelsvisible=false)
+graphplot!(ax, g; edge_width=0.1, node_color=cid, node_size=6)
 colsize!(f.layout, 1, Aspect(1, 1.0))
 resize_to_layout!(f)
 f

@@ -53,189 +53,185 @@ julia> println(cid)  # community labels
 ```
 """
 function lancichinetti_fortunato_radicchi(
-  n::Integer,
-  k_avg::Real,
-  k_max::Integer;
-  is_directed = false,
-  kwargs...,
+    n::Integer, k_avg::Real, k_max::Integer; is_directed=false, kwargs...
 )
 
-  # make some basic checks
-  n < 4 && throw(ArgumentError("number of vertices must be at least 4"))
-  k_avg < 2.1 && throw(ArgumentError("average degree must be at least 2.1"))
-  k_max >= n - 1 && throw(ArgumentError("maximum degree must be at most n-1"))
-  k_max < k_avg &&
-    throw(ArgumentError("maximum degree must be at least the average degree"))
+    # make some basic checks
+    n < 4 && throw(ArgumentError("number of vertices must be at least 4"))
+    k_avg < 2.1 && throw(ArgumentError("average degree must be at least 2.1"))
+    k_max >= n - 1 && throw(ArgumentError("maximum degree must be at most n-1"))
+    k_max < k_avg &&
+        throw(ArgumentError("maximum degree must be at least the average degree"))
 
-  # decide directed or undirected
-  g = is_directed ? SimpleDiGraph(n) : SimpleGraph(n)
-  g, cid = lancichinetti_fortunato_radicchi!(g, k_avg, k_max; kwargs...)
+    # decide directed or undirected
+    g = is_directed ? SimpleDiGraph(n) : SimpleGraph(n)
+    g, cid = lancichinetti_fortunato_radicchi!(g, k_avg, k_max; kwargs...)
 
-  isempty(cid) && throw(ArgumentError("Function timed out. Check input parameters."))
+    isempty(cid) && throw(ArgumentError("Function timed out. Check input parameters."))
 
-  return g, cid
+    return g, cid
 end
 
 function lancichinetti_fortunato_radicchi!(
-  g::SimpleGraph,
-  k_avg::Real,
-  k_max::Real;
-  nmin::Union{Nothing,Integer} = nothing,
-  nmax::Union{Nothing,Integer} = nothing,
-  tau::Real = 2.0,
-  tau2::Real = 1.0,
-  fixed_range::Bool = !isnothing(nmax) && !isnothing(nmin),
-  mixing_parameter::Real = 0.1,
-  overlapping_nodes::Integer = 0,
-  overlap_membership::Integer = 0,
-  excess::Bool = false,
-  defect::Bool = false,
-  seed::Integer = 1,
-  clustering_coeff::Union{Nothing,Real} = nothing,
+    g::SimpleGraph,
+    k_avg::Real,
+    k_max::Real;
+    nmin::Union{Nothing,Integer}=nothing,
+    nmax::Union{Nothing,Integer}=nothing,
+    tau::Real=2.0,
+    tau2::Real=1.0,
+    fixed_range::Bool=!isnothing(nmax) && !isnothing(nmin),
+    mixing_parameter::Real=0.1,
+    overlapping_nodes::Integer=0,
+    overlap_membership::Integer=0,
+    excess::Bool=false,
+    defect::Bool=false,
+    seed::Integer=1,
+    clustering_coeff::Union{Nothing,Real}=nothing,
 )::Tuple{SimpleGraph,Vector{Int}}
 
-  # the default "nothing" value for LFR library
-  LFR_UNLIKELY = -214741
+    # the default "nothing" value for LFR library
+    LFR_UNLIKELY = -214741
 
-  n = nv(g)
+    n = nv(g)
 
-  X = redirect_stdout(devnull) do
-    return ccall(
-      ("benchmark", liblfrsymmunwgt),
-      Ptr{Cint},
-      (
-        Cint,
-        Cint,
-        Cint,
-        Cdouble,
-        Cint,
-        Cdouble,
-        Cdouble,
-        Cdouble,
-        Cint,
-        Cint,
-        Cint,
-        Cint,
-        Cint,
-        Cdouble,
-        Cint,
-      ),
-      excess,
-      defect,
-      n,
-      k_avg,
-      k_max,
-      tau,
-      tau2,
-      mixing_parameter,
-      overlapping_nodes,
-      overlap_membership,
-      isnothing(nmin) ? LFR_UNLIKELY : nmin,
-      isnothing(nmax) ? LFR_UNLIKELY : nmax,
-      fixed_range,
-      isnothing(clustering_coeff) ? LFR_UNLIKELY : clustering_coeff,
-      seed,
-    )
-  end
+    X = redirect_stdout(devnull) do
+        return ccall(
+            ("benchmark", liblfrsymmunwgt),
+            Ptr{Cint},
+            (
+                Cint,
+                Cint,
+                Cint,
+                Cdouble,
+                Cint,
+                Cdouble,
+                Cdouble,
+                Cdouble,
+                Cint,
+                Cint,
+                Cint,
+                Cint,
+                Cint,
+                Cdouble,
+                Cint,
+            ),
+            excess,
+            defect,
+            n,
+            k_avg,
+            k_max,
+            tau,
+            tau2,
+            mixing_parameter,
+            overlapping_nodes,
+            overlap_membership,
+            isnothing(nmin) ? LFR_UNLIKELY : nmin,
+            isnothing(nmax) ? LFR_UNLIKELY : nmax,
+            fixed_range,
+            isnothing(clustering_coeff) ? LFR_UNLIKELY : clustering_coeff,
+            seed,
+        )
+    end
 
-  if isequal(X, Ptr{Cint}(C_NULL))
-    throw(
-      ArgumentError(
-        "Error in parameter input. Check average degree, maximum degree, and number of nodes.",
-      ),
-    )
-  end
-  n = unsafe_load(X)
-  m = unsafe_load(X + sizeof(Cint))
+    if isequal(X, Ptr{Cint}(C_NULL))
+        throw(
+            ArgumentError(
+                "Error in parameter input. Check average degree, maximum degree, and number of nodes.",
+            ),
+        )
+    end
+    n = unsafe_load(X)
+    m = unsafe_load(X + sizeof(Cint))
 
-  X = unsafe_wrap(Array{Cint}, X, 2 + n + 2 * m; own = true)
+    X = unsafe_wrap(Array{Cint}, X, 2 + n + 2 * m; own=true)
 
-  for i = 3:2:(2*m+2)
-    add_edge!(g, X[i], X[i+1])
-  end
-  cid = Int64.(X[(2*m+3):end])
+    for i in 3:2:(2 * m + 2)
+        add_edge!(g, X[i], X[i + 1])
+    end
+    cid = Int64.(X[(2 * m + 3):end])
 
-  return g, cid
+    return g, cid
 end
 
 function lancichinetti_fortunato_radicchi!(
-  g::SimpleDiGraph,
-  k_avg::Real,
-  k_max::Real;
-  nmin::Union{Nothing,Integer} = nothing,
-  nmax::Union{Nothing,Integer} = nothing,
-  tau::Real = 2.0,
-  tau2::Real = 1.0,
-  fixed_range::Bool = !isnothing(nmax) && !isnothing(nmin),
-  mixing_parameter::Real = 0.1,
-  overlapping_nodes::Integer = 0,
-  overlap_membership::Integer = 0,
-  excess::Bool = false,
-  defect::Bool = false,
-  seed::Integer = 1,
+    g::SimpleDiGraph,
+    k_avg::Real,
+    k_max::Real;
+    nmin::Union{Nothing,Integer}=nothing,
+    nmax::Union{Nothing,Integer}=nothing,
+    tau::Real=2.0,
+    tau2::Real=1.0,
+    fixed_range::Bool=!isnothing(nmax) && !isnothing(nmin),
+    mixing_parameter::Real=0.1,
+    overlapping_nodes::Integer=0,
+    overlap_membership::Integer=0,
+    excess::Bool=false,
+    defect::Bool=false,
+    seed::Integer=1,
 )::Tuple{SimpleDiGraph,Vector{Int}}
 
-  # the default "nothing" value for LFR library
-  LFR_UNLIKELY = -214741
+    # the default "nothing" value for LFR library
+    LFR_UNLIKELY = -214741
 
-  n = nv(g)
+    n = nv(g)
 
-  X = redirect_stdout(devnull) do
-    return ccall(
-      ("benchmark", liblfrnonsymmunwgt),
-      Ptr{Cint},
-      (
-        Cint,
-        Cint,
-        Cint,
-        Cdouble,
-        Cint,
-        Cdouble,
-        Cdouble,
-        Cdouble,
-        Cint,
-        Cint,
-        Cint,
-        Cint,
-        Cint,
-        Cint,
-      ),
-      excess,
-      defect,
-      n,
-      k_avg / 2,
-      k_max,
-      tau,
-      tau2,
-      mixing_parameter,
-      overlapping_nodes,
-      overlap_membership,
-      isnothing(nmin) ? LFR_UNLIKELY : nmin,
-      isnothing(nmax) ? LFR_UNLIKELY : nmax,
-      fixed_range,
-      seed,
-    )
-  end
+    X = redirect_stdout(devnull) do
+        return ccall(
+            ("benchmark", liblfrnonsymmunwgt),
+            Ptr{Cint},
+            (
+                Cint,
+                Cint,
+                Cint,
+                Cdouble,
+                Cint,
+                Cdouble,
+                Cdouble,
+                Cdouble,
+                Cint,
+                Cint,
+                Cint,
+                Cint,
+                Cint,
+                Cint,
+            ),
+            excess,
+            defect,
+            n,
+            k_avg / 2,
+            k_max,
+            tau,
+            tau2,
+            mixing_parameter,
+            overlapping_nodes,
+            overlap_membership,
+            isnothing(nmin) ? LFR_UNLIKELY : nmin,
+            isnothing(nmax) ? LFR_UNLIKELY : nmax,
+            fixed_range,
+            seed,
+        )
+    end
 
-  if isequal(X, Ptr{Cint}(C_NULL))
-    throw(
-      ArgumentError(
-        "Error in parameter input. Check average degree, maximum degree, and number of nodes.",
-      ),
-    )
-  end
+    if isequal(X, Ptr{Cint}(C_NULL))
+        throw(
+            ArgumentError(
+                "Error in parameter input. Check average degree, maximum degree, and number of nodes.",
+            ),
+        )
+    end
 
-  n = unsafe_load(X)
-  m = unsafe_load(X + sizeof(Cint))
+    n = unsafe_load(X)
+    m = unsafe_load(X + sizeof(Cint))
 
-  X = unsafe_wrap(Array{Cint}, X, 2 + n + 2 * m; own = true)
+    X = unsafe_wrap(Array{Cint}, X, 2 + n + 2 * m; own=true)
 
-  for i = 3:2:(2*m+2)
-    add_edge!(g, X[i], X[i+1])
-  end
-  cid = Int64.(X[(2*m+3):end])
+    for i in 3:2:(2 * m + 2)
+        add_edge!(g, X[i], X[i + 1])
+    end
+    cid = Int64.(X[(2 * m + 3):end])
 
-  return g, cid
+    return g, cid
 end
 
 end
