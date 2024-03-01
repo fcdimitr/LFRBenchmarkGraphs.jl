@@ -1,6 +1,6 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-LFRBenchmarkGraphs = "b7e2952b-eb82-4d7c-9142-a0c7b4e212f2"
+LFRBenchmarkGraphs = "e2d0dd93-c6be-4a4f-9a61-2b35d7242bb2"
 
 [compat]
 Documenter = "1"
