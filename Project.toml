@@ -9,5 +9,5 @@ lfr_benchmark_jll = "cb590574-ea86-51dd-800e-297a027516d0"
 
 [compat]
 julia = "1.6"
-Graphs = "1.9"
+Graphs = "1"
 lfr_benchmark_jll = "1.0"
