@@ -20,7 +20,7 @@ Installation is straightforward. First, enter Pkg mode by hitting `]`, and then 
 pkg> add LFRBenchmarkGraphs
 ```
 
-## Exzmple usage
+## Example usage
 
 ### Dependencies for this demo
 Import the necessary packages and activate the environment
