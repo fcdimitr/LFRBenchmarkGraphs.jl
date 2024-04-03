@@ -40,6 +40,9 @@ numerical simulations show that it does not affect the degree distribution appre
 - `excess=false`: if true, the degree distribution is superiorly bounded by μ.
 - `defect=false`: if true, the degree distribution is inferiorly bounded by μ.
 
+!!! warning "Use of excess and defect options"
+    Both options `excess` and `defect` cannot be `true` at the same time
+
 ### Notes
 Depending on the input parameter combination, the function may not converge to a solution.
 If this happens, try different input parameters.
