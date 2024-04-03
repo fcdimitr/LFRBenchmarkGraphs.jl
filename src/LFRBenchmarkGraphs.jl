@@ -15,6 +15,8 @@ we can think of it as an SBM with power-law distribution for the community size 
 degree distribution.
 
 ### Optional Arguments
+- `mixing_parameter`: mixing parameter μ, defines the average average ratio of {external
+  degree}/{total degree}
 - `is_directed=false`: if true, return a directed graph.
 - `seed=1`: set the random seed.
 - `tau=2.0`: exponent for the power-law degree distribution for degree distribution.
@@ -23,6 +25,23 @@ degree distribution.
 - `nmin=nothing`, `nmax=nothing`: minimum and maximum (range) for community sizes.
 - `overlapping_nodes=0`: number of overlapping nodes.
 - `overlap_membership=0`: number of memberships for overlapping nodes.
+- `clustering_coeff=nothing`: if specified,  the program will perform a number of rewiring
+  to increase the average cluster coefficient up to the wished value.
+
+### Other options
+If you want to produce a benchmark whose distribution of the ratio of external degree/total
+degree is superiorly (inferiorly) bounded by the mixing parameter. In other words, if you
+use one of these options, the mixing parameter is not the average ratio of external
+degree/total degree (as it used to be) but the maximum (or the minimum) of that
+distribution. When using one of these options, what the program essentially does is to
+approximate the external degree always by excess (or by defect) and if necessary to modify
+the degree distribution. Nevertheless, this last possibility occurs for a few nodes and
+numerical simulations show that it does not affect the degree distribution appreciably.
+- `excess=false`: if true, the degree distribution is superiorly bounded by μ.
+- `defect=false`: if true, the degree distribution is inferiorly bounded by μ.
+
+!!! warning "Use of excess and defect options"
+    Both options `excess` and `defect` cannot be `true` at the same time
 
 ### Notes
 Depending on the input parameter combination, the function may not converge to a solution.
