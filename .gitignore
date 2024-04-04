@@ -7,3 +7,4 @@ docs/Manifest.toml
 example/Manifest.toml
 .vscode/settings.json
 docs/build
+.dir-locals.el
