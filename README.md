@@ -6,7 +6,7 @@
 [![Coverage](https://codecov.io/gh/fcdimitr/LFRBenchmarkGraphs.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/fcdimitr/LFRBenchmarkGraphs.jl)
 [![Code Style: Blue](https://img.shields.io/badge/code%20style-blue-4495d1.svg)](https://github.com/invenia/BlueStyle)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
-[![DOI](https://zenodo.org/badge/.svg)](https://zenodo.org/doi/10.0000/zenodo.0000000)
+[![DOI](https://zenodo.org/badge/765480913.svg)](https://zenodo.org/doi/10.5281/zenodo.11094576)
 
 ## Overview
 
