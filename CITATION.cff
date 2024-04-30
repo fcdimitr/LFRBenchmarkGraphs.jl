@@ -1,0 +1,30 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: LFRBenchmarkGraphs.jl
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Dimitris
+    family-names: Floros
+    affiliation: 'Nicholas School of the Environment, Duke University'
+    orcid: 'https://orcid.org/0000-0003-1190-4075'
+identifiers:
+  - type: doi
+    value: 10.0000/zenodo.0000000
+    description: Zenodo
+repository-code: 'https://github.com/fcdimitr/LFRBenchmarkGraphs.jl'
+abstract: >-
+  This is a Julia package/wrapper for generating
+  Lancichinetti-Fortunato-Radicchi model benchmark graphs,
+  which are widely used in the study of community detection
+  algorithms.
+keywords:
+  - community-detection
+  - clustering
+  - network
+  - graph-theory
+license: MIT

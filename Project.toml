@@ -1,7 +1,7 @@
 name = "LFRBenchmarkGraphs"
 uuid = "e2d0dd93-c6be-4a4f-9a61-2b35d7242bb2"
 authors = ["Dimitris Floros"]
-version = "1.0.1"
+version = "1.0.2"
 
 [deps]
 Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
